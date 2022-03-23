@@ -15,12 +15,12 @@
   </property>
   <property name="windowIcon">
    <iconset resource="resources/resources.qrc">
-    <normaloff>:/icon/FUP_icon.png</normaloff>:/icon/FUP_icon.png</iconset>
+    <normaloff>:/icon/FUP_icon_white.png</normaloff>:/icon/FUP_icon_white.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QGroupBox" name="grpServiceControl">
+     <widget class="QGroupBox" name="grpStatus">
       <property name="font">
        <font>
         <weight>75</weight>
@@ -88,7 +88,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="grpLog">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>2</horstretch>
@@ -125,7 +125,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="grpInfo">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>1</horstretch>
@@ -142,20 +142,136 @@
          <string>Information</string>
         </property>
         <layout class="QFormLayout" name="formLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
+         <item row="0" column="0" colspan="2">
+          <layout class="QFormLayout" name="formLayout_3">
+           <property name="labelAlignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
            </property>
-           <property name="text">
-            <string>Program:</string>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Program:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="txtProgramIcon">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="txtProgramName">
+               <property name="font">
+                <font>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Path:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="txtProgram">
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0" colspan="2">
+          <widget class="Line" name="line">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
+         <item row="2" column="0">
           <widget class="QLabel" name="label_3">
            <property name="font">
             <font>
@@ -168,33 +284,7 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Last restart on:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="txtProgram">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
+         <item row="2" column="1">
           <widget class="QLabel" name="txtRestartCount">
            <property name="font">
             <font>
@@ -207,7 +297,20 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <weight>50</weight>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Last restart on:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
           <widget class="QLabel" name="txtLastRestartDateTime">
            <property name="font">
             <font>
@@ -311,16 +414,37 @@
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionMonitoringStatus"/>
+   <addaction name="separator"/>
    <addaction name="actionStartMonitoring"/>
    <addaction name="actionStopMonitoring"/>
   </widget>
   <action name="actionStartMonitoring">
+   <property name="icon">
+    <iconset resource="resources/resources.qrc">
+     <normaloff>:/icon/run.png</normaloff>:/icon/run.png</iconset>
+   </property>
    <property name="text">
     <string>Start monitoring</string>
    </property>
@@ -329,6 +453,10 @@
    </property>
   </action>
   <action name="actionStopMonitoring">
+   <property name="icon">
+    <iconset resource="resources/resources.qrc">
+     <normaloff>:/icon/stop.png</normaloff>:/icon/stop.png</iconset>
+   </property>
    <property name="text">
     <string>Stop monitoring</string>
    </property>
@@ -338,7 +466,7 @@
   </action>
   <action name="actionQuit">
    <property name="text">
-    <string>Quit ForeverUp</string>
+    <string>Exit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -355,6 +483,24 @@
    </property>
    <property name="text">
     <string>Enable notifications</string>
+   </property>
+  </action>
+  <action name="actionMonitoringStatus">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources/resources.qrc">
+     <normaloff>:/icon/invisible_red.png</normaloff>:/icon/invisible_red.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stopped</string>
+   </property>
+   <property name="iconText">
+    <string>Stopped</string>
+   </property>
+   <property name="toolTip">
+    <string>Monitoring status</string>
    </property>
   </action>
  </widget>

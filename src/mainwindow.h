@@ -17,6 +17,7 @@
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QSystemTrayIcon>
+#include <QFileIconProvider>
 
 #include <windows.h>
 
@@ -89,6 +90,8 @@ private:
     bool m_enableNotifications;
 
     QMenu *m_contextMenu;
+
+    QFileIconProvider m_iconProvider;
 };
 
 #endif // MAINWINDOW_H

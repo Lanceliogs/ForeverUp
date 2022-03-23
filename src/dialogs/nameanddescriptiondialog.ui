@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Name and description - New</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icon/FUP_icon_white.png</normaloff>:/icon/FUP_icon_white.png</iconset>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
@@ -50,7 +54,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

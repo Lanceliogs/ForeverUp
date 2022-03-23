@@ -17,18 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tblProgramList->setModel(m_model);
 
     m_sysTrayIcon = new QSystemTrayIcon(this);
-    m_sysTrayIcon->setIcon(QIcon(":/icon/FUP_icon.png"));
+    m_sysTrayIcon->setIcon(QIcon(":/icon/FUP_icon_white.png"));
     connect(m_sysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onSystemTrayIconActivated(QSystemTrayIcon::ActivationReason)));
 
     QMenu *menu = new QMenu(this);
 
-    m_statusAction = menu->addAction(tr("Status: Not monitoring"));
+    m_statusAction = menu->addAction(tr("ForeverUp: Stopped"));
     menu->addSeparator();
     m_startAction = menu->addAction(tr("Start monitoring"), this, SLOT(on_actionStartMonitoring_triggered()));
     m_stopAction = menu->addAction(tr("Stop monitoring"), this, SLOT(on_actionStopMonitoring_triggered()));
     menu->addAction(tr("Show GUI"), this, SLOT(show()));
-    menu->addAction(tr("Close ForeverUp"), this, SLOT(onCloseRequest()));
+    menu->addSeparator();
+    menu->addAction(tr("Exit"), this, SLOT(onCloseRequest()));
     m_sysTrayIcon->setContextMenu(menu);
 
     m_statusAction->setEnabled(false);
@@ -229,10 +230,14 @@ void MainWindow::startMonitoring()
     }
 
     if (m_enableNotifications)
-        m_sysTrayIcon->showMessage(tr("ForeverUp"), tr("Monitoring started"), QIcon(":/icon/FUP_icon.png"), 1000);
+        m_sysTrayIcon->showMessage(tr("ForeverUp"), tr("Monitoring started"), QIcon(":/icon/FUP_icon_white.png"), 1000);
+
+    ui->actionMonitoringStatus->setIconText(tr("Running"));
+    ui->actionMonitoringStatus->setIcon(QIcon(":/icon/witness_green.png"));
 
     ui->txtServiceStatus->setText("Running");
-    m_statusAction->setText(tr("Status: Monitoring..."));
+    m_statusAction->setText(tr("ForeverUp: Monitoring..."));
+
     ui->actionStartMonitoring->setEnabled(false);
     m_startAction->setEnabled(false);
     ui->actionStopMonitoring->setEnabled(true);
@@ -253,10 +258,14 @@ void MainWindow::on_actionStopMonitoring_triggered()
     }
 
     if (m_enableNotifications)
-        m_sysTrayIcon->showMessage(tr("ForeverUp"), tr("Monitoring stopped"), QIcon(":/icon/FUP_icon.png"), 1000);
+        m_sysTrayIcon->showMessage(tr("ForeverUp"), tr("Monitoring stopped"), QIcon(":/icon/FUP_icon_white.png"), 1000);
+
+    ui->actionMonitoringStatus->setIconText(tr("Stopped"));
+    ui->actionMonitoringStatus->setIcon(QIcon(":/icon/invisible_red.png"));
 
     ui->txtServiceStatus->setText("Not running");
-    m_statusAction->setText(tr("Status: Not monitoring"));
+    m_statusAction->setText(tr("ForeverUp: Stopped"));
+
     ui->actionStartMonitoring->setEnabled(true);
     m_startAction->setEnabled(true);
     ui->actionStopMonitoring->setEnabled(false);
@@ -380,7 +389,7 @@ void MainWindow::restartProgram(int index, bool kill)
         logMessage(LL_FATAL, QString("Couldn't restart %1").arg(item.name), item.logFile);
         if (m_enableNotifications)
             m_sysTrayIcon->showMessage(tr("ForeverUp"), tr("ForeverUp couldn't restart \"%1\"").arg(item.name),
-                                       QIcon(":/icon/FUP_icon.png"), 5000);
+                                       QIcon(":/icon/FUP_icon_white.png"), 5000);
         m_model->data()[index].restartError = true;
         m_model->data()[index].status = ProgramItem::Stopped;
         m_timerList.at(index)->stop();
@@ -391,6 +400,7 @@ void MainWindow::restartProgram(int index, bool kill)
 
 void MainWindow::onCloseRequest()
 {
+    m_enableNotifications = false;
     on_actionStopMonitoring_triggered();
     close();
     emit finished();
@@ -398,8 +408,10 @@ void MainWindow::onCloseRequest()
 
 void MainWindow::onSystemTrayIconActivated(QSystemTrayIcon::ActivationReason reason)
 {
-    if (reason == QSystemTrayIcon::DoubleClick && isHidden()) {
-        show();
+    if (reason == QSystemTrayIcon::DoubleClick) {
+        if (isHidden()) show();
+        activateWindow();
+        raise();
     }
 }
 
@@ -410,7 +422,7 @@ void MainWindow::notifyBackground()
     m_bgNotified = true;
     if (m_enableNotifications)
         m_sysTrayIcon->showMessage(tr("ForeverUp"), tr("ForeverUp is still running in the background"),
-                                   QIcon(":/icon/FUP_icon.png"), 1000);
+                                   QIcon(":/icon/FUP_icon_white.png"), 1000);
 }
 
 void MainWindow::on_tblProgramList_customContextMenuRequested(const QPoint &pos)
@@ -464,6 +476,9 @@ void MainWindow::displayInfo()
     int row = select->selectedRows().first().row();
     ProgramItem item = m_model->data()[row];
     ui->txtProgram->setText(item.program);
+    ui->txtProgramName->setText(item.program.mid(item.program.lastIndexOf("/") + 1));
+    QIcon icon = m_iconProvider.icon(QFileInfo(item.program));
+    ui->txtProgramIcon->setPixmap(icon.pixmap(ui->txtProgramIcon->size()));
     ui->txtRestartCount->setText(QString::number(item.restartCount));
     ui->txtLastRestartDateTime->setText(item.lastRestartDateTime.toString("yyyy/MM/dd HH:mm:ss"));
 }

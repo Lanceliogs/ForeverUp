@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/icon">
         <file>FUP_icon.png</file>
+        <file>FUP_icon_white.png</file>
+        <file>run.png</file>
+        <file>stop.png</file>
+        <file>invisible_red.png</file>
+        <file>visible.png</file>
+        <file>witness.png</file>
+        <file>witness_green.png</file>
     </qresource>
 </RCC>
