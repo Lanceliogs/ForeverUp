@@ -286,8 +286,8 @@ void MainWindow::onTimeout()
     QString command;
     if (item.pid == 0) {
         command = QString("tasklist /NH /FO csv /FI \"ImageName eq %1\" /FI \"Status eq Running\"").arg(imageName);
-    } else { // pid is known, we check by pid
-        command = QString("tasklist /NH /FO csv /FI \"PID eq %1\" /FI \"Status eq Running\"").arg(item.pid);
+    } else {
+        command = QString("tasklist /NH /FO csv /FI \"ImageName eq %1\" /FI \"PID eq %2\" /FI \"Status eq Running\"").arg(imageName).arg(item.pid);
     }
     logMessage(LL_INFO, QString("CMD: %1").arg(command));
 
@@ -297,10 +297,25 @@ void MainWindow::onTimeout()
     QString cout = proc.readAllStandardOutput();
     logMessage(LL_INFO, QString("RET: %1").arg(cout));
 
-    if (!cout.contains(imageName)) { // Not running
-        logMessage(LL_WARNING, QString("Not running: %1/%2").arg(item.name).arg(item.pid), item.logFile);
-        restartProgram(index);
-        return;
+
+    while (!cout.contains(imageName)) { // Not running
+        if (item.pid == 0) {
+            logMessage(LL_WARNING, QString("Not running: %1/%2").arg(item.name).arg(item.pid), item.logFile);
+            restartProgram(index);
+            return;
+        } else {
+            // PID may have changed, thus we reset it
+            logMessage(LL_WARNING, QString("Instance was closed: %1/%2. Checking for another instance").arg(item.name).arg(item.pid), item.logFile);
+            item.pid = 0;
+            command = QString("tasklist /NH /FO csv /FI \"ImageName eq %1\" /FI \"Status eq Running\"").arg(imageName);
+            logMessage(LL_INFO, QString("CMD: %1").arg(command));
+
+            QProcess proc2;
+            proc2.start(command);
+            proc2.waitForFinished(10000);
+            cout = proc2.readAllStandardOutput();
+            logMessage(LL_INFO, QString("RET: %1").arg(cout));
+        }
     }
 
     QStringList entries = cout.split("\r\n", QString::SkipEmptyParts);
@@ -319,10 +334,13 @@ void MainWindow::onTimeout()
         return;
     }
 
-    if (item.pid == 0) { // Retrieve PID if needed
-        m_model->data()[index].pid = tokens.at(1).toInt();
-        logMessage(LL_INFO, QString("pid found: %1").arg(m_model->data()[index].pid), item.logFile);
+    // Retrieve PID if needed
+    int pid = tokens.at(1).toInt();
+    if (pid != item.pid) {
+        m_model->data()[index].pid = pid;
+        logMessage(LL_INFO, QString("New PID: %1").arg(m_model->data()[index].pid), item.logFile);
     }
+
 
     if (isProcessHanging(m_model->data()[index].pid)) {
         logMessage(LL_WARNING, QString("Process is hanging: %1").arg(item.pid), item.logFile);
