@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     m_about = new AboutWidget(this);
 
+    m_settings = new AdvancedSettingsDialog(this);
+
     m_model = new ProgramTableModel(ui->tblProgramList);
     ui->tblProgramList->setModel(m_model);
 
@@ -27,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Menu
     QMenu *menu = new QMenu(this);
     m_statusAction = menu->addAction(tr("ForeverUp: Stopped"));
-    QAction *showAction = menu->addAction(tr("Show GUI"), this, SLOT(show()));
+    QAction *showAction = menu->addAction(tr("Open ForeverUp..."), this, SLOT(show()));
     QFont font = showAction->font();
     font.setBold(true);
     showAction->setFont(font);
@@ -90,7 +92,8 @@ void MainWindow::hideEvent(QHideEvent *event)
 
 void MainWindow::loadSettings()
 {
-    QSettings set("foreverup.ini", QSettings::IniFormat);
+    QString setFileName = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/foreverup.ini";
+    QSettings set(setFileName, QSettings::IniFormat);
     set.setIniCodec("UTF-8");
 
     QStringList programNameList = set.childGroups();
@@ -125,7 +128,8 @@ void MainWindow::loadSettings()
 
 void MainWindow::saveSettings()
 {
-    QSettings set("foreverup.ini", QSettings::IniFormat);
+    QString setFileName = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/foreverup.ini";
+    QSettings set(setFileName, QSettings::IniFormat);
     set.setIniCodec("UTF-8");
     set.clear();
     set.sync();
@@ -598,4 +602,53 @@ void MainWindow::onCheckShowRequestTimeout()
 void MainWindow::on_actionAboutForeverUp_triggered()
 {
     m_about->exec();
+}
+
+void MainWindow::on_actionAdvanced_triggered()
+{
+    if (m_settings->exec()) {
+        m_settings->saveSettings();
+        applyAdvancedSettings();
+    } else {
+        m_settings->undo();
+    }
+}
+
+void MainWindow::applyAdvancedSettings()
+{
+    QString startupPath = QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation) + "/Startup";
+    QString linkFileName = QString("%1/ForeverUp.lnk").arg(startupPath);
+
+    if (QFile::exists(linkFileName)) {
+        qDebug() << "Removing old shortcut:" << QFile::remove(linkFileName);
+    }
+
+    if (m_settings->launchAtStartupEnabled()) {
+        QStringList arguments;
+        if (m_settings->isQuiet()) arguments << "quiet";
+        if (m_settings->isNoGui()) arguments << "nogui";
+        if (m_settings->isAutostart()) arguments << "autostart";
+
+        QString target = QDir::toNativeSeparators(qApp->applicationFilePath());
+        QString link = QDir::toNativeSeparators(linkFileName);
+        QString description = tr("Launch ForeverUp at startup");
+        int showWindow = SW_SHOWNORMAL;
+        QString execDir = QDir::toNativeSeparators(qApp->applicationDirPath());
+
+        qDebug() << target;
+        qDebug() << link;
+        qDebug() << execDir;
+
+        QString testIcoPath = "D:\\tools-dev\\ForeverUp\\src\\resources\\FUP_icon_white.ico";
+
+        int ret = ShortcutProvider::create(target.toUtf8().data(), arguments.join(" ").toUtf8().data(),
+                                           link.toUtf8().data(), description.toUtf8().data(),
+                                           showWindow, execDir.toUtf8().data(), target.toUtf8().data(), 0);
+        if (ret < 0) {
+            qDebug() << "Couldn't create shortcut:" << linkFileName;
+            QMessageBox::warning(this, tr("Couldn't create shortcut"),
+                                 tr("Launch at startup will be reset to disabled for now."));
+            m_settings->setLaunchAtStartupEnabled(false);
+        }
+    }
 }

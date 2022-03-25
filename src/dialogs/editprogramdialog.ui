@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
+    <width>565</width>
     <height>372</height>
    </rect>
   </property>
@@ -214,6 +214,35 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Restart if hanging for:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QSpinBox" name="txtMaxHangingCount">
+     <property name="font">
+      <font>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="suffix">
+      <string> checks</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1000000000</number>
+     </property>
+     <property name="value">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
    <item row="9" column="0" colspan="2">
     <widget class="Line" name="line_2">
      <property name="orientation">
@@ -287,6 +316,19 @@
      </item>
     </layout>
    </item>
+   <item row="14" column="0" colspan="2">
+    <widget class="Line" name="line_4">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
    <item row="15" column="0" colspan="2">
     <widget class="QCheckBox" name="chkEnabled">
      <property name="font">
@@ -307,48 +349,6 @@
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="14" column="0" colspan="2">
-    <widget class="Line" name="line_4">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Restart if hanging for:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1">
-    <widget class="QSpinBox" name="txtMaxHangingCount">
-     <property name="font">
-      <font>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="suffix">
-      <string> checks</string>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1000000000</number>
-     </property>
-     <property name="value">
-      <number>5</number>
      </property>
     </widget>
    </item>

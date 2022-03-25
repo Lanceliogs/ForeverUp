@@ -22,11 +22,19 @@ AboutWidget::AboutWidget(QWidget *parent) :
     ui->txtVersion->setText(versionWithUrl);
     ui->txtUsername->setText(glorifiedName);
     ui->txtBuildDateTime->setText(BUILD_DATETIME);
+
+    ui->txtVersion->setTextFormat(Qt::RichText);
+    ui->txtVersion->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui->txtVersion->setOpenExternalLinks(true);
 #else
     ui->txtVersion->setText(tr("Unknown"));
-    ui->txtUsername->setText(tr("Unknown");
-            ui->txtBuildDateTime->setText(tr("Unknown");
-        #endif
+    ui->txtUsername->setText(tr("Unknown"));
+    ui->txtBuildDateTime->setText(tr("Unknown"));
+#endif
+
+    ui->txtGithubLink->setTextFormat(Qt::RichText);
+    ui->txtGithubLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui->txtGithubLink->setOpenExternalLinks(true);
 }
 
 AboutWidget::~AboutWidget()

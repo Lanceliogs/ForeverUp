@@ -398,6 +398,8 @@
      <string>Settings</string>
     </property>
     <addaction name="actionEnableNotifications"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdvanced"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -501,6 +503,11 @@
    </property>
    <property name="toolTip">
     <string>Monitoring status</string>
+   </property>
+  </action>
+  <action name="actionAdvanced">
+   <property name="text">
+    <string>Advanced...</string>
    </property>
   </action>
  </widget>

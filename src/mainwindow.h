@@ -2,9 +2,13 @@
 #define MAINWINDOW_H
 
 #include "programtablemodel.h"
+
+#include "dialogs/aboutwidget.h"
+#include "dialogs/advancedsettingsdialog.h"
 #include "dialogs/editprogramdialog.h"
 #include "dialogs/nameanddescriptiondialog.h"
-#include "dialogs/aboutwidget.h"
+
+#include "shortcutprovider.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -20,6 +24,9 @@
 #include <QSystemTrayIcon>
 #include <QFileIconProvider>
 #include <QSharedMemory>
+#include <QDir>
+#include <QStandardPaths>
+#include <QMessageBox>
 
 #include <windows.h>
 
@@ -79,12 +86,17 @@ private slots:
 
     void on_actionAboutForeverUp_triggered();
 
+    void on_actionAdvanced_triggered();
+
 private:
     bool isProcessHanging(int pid);
     void logMessage(QString level, QString msg, QString fileName = "");
 
+    void applyAdvancedSettings();
+
     Ui::MainWindow *ui;
 
+    AdvancedSettingsDialog *m_settings;
     AboutWidget *m_about;
 
     ProgramTableModel *m_model;
