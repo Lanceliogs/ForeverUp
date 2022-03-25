@@ -16,7 +16,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5Widgets REQUIRED) # On a besoin de Qt5
 
+# GIT SNAP
+add_custom_target(GIT_SNAP
+    COMMAND call git_snap.sh
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    )
+
 # GUI
 file(GLOB_RECURSE GUI_SRC_LIST src/*)
 add_executable(ForeverUp WIN32 ${GUI_SRC_LIST})
 target_link_libraries (ForeverUp ${Qt5Widgets_LIBRARIES}) # Linking
+
+# Uncomment this to add the version inside the executable
+add_dependencies(ForeverUp GIT_SNAP)

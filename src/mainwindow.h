@@ -4,6 +4,7 @@
 #include "programtablemodel.h"
 #include "dialogs/editprogramdialog.h"
 #include "dialogs/nameanddescriptiondialog.h"
+#include "dialogs/aboutwidget.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -76,11 +77,15 @@ private slots:
 
     void onCheckShowRequestTimeout();
 
+    void on_actionAboutForeverUp_triggered();
+
 private:
     bool isProcessHanging(int pid);
     void logMessage(QString level, QString msg, QString fileName = "");
 
     Ui::MainWindow *ui;
+
+    AboutWidget *m_about;
 
     ProgramTableModel *m_model;
     QList<QTimer*> m_timerList;

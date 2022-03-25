@@ -13,21 +13,27 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_about = new AboutWidget(this);
+
     m_model = new ProgramTableModel(ui->tblProgramList);
     ui->tblProgramList->setModel(m_model);
 
+    // System tray icon
     m_sysTrayIcon = new QSystemTrayIcon(this);
     m_sysTrayIcon->setIcon(QIcon(":/icon/FUP_icon_white.png"));
     connect(m_sysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onSystemTrayIconActivated(QSystemTrayIcon::ActivationReason)));
 
+    // Menu
     QMenu *menu = new QMenu(this);
-
     m_statusAction = menu->addAction(tr("ForeverUp: Stopped"));
+    QAction *showAction = menu->addAction(tr("Show GUI"), this, SLOT(show()));
+    QFont font = showAction->font();
+    font.setBold(true);
+    showAction->setFont(font);
     menu->addSeparator();
     m_startAction = menu->addAction(tr("Start monitoring"), this, SLOT(on_actionStartMonitoring_triggered()));
     m_stopAction = menu->addAction(tr("Stop monitoring"), this, SLOT(on_actionStopMonitoring_triggered()));
-    menu->addAction(tr("Show GUI"), this, SLOT(show()));
     menu->addSeparator();
     menu->addAction(tr("Exit"), this, SLOT(onCloseRequest()));
     m_sysTrayIcon->setContextMenu(menu);
@@ -51,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_enableNotifications = !qApp->arguments().contains("quiet") && m_sysTrayIcon->supportsMessages();
     ui->actionEnableNotifications->setChecked(m_enableNotifications);
 
+    // Show request shared memory
     m_showRequest = new QSharedMemory(FUP_SHARED_MEM_KEY, this);
     if (m_showRequest->create(sizeof(qint64))) {
         m_checkShowReqTimer = new QTimer(this);
@@ -586,4 +593,9 @@ void MainWindow::onCheckShowRequestTimeout()
     } else {
         qDebug() << "showReq: Couldn't lock shared memory.";
     }
+}
+
+void MainWindow::on_actionAboutForeverUp_triggered()
+{
+    m_about->exec();
 }
