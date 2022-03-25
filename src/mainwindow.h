@@ -18,8 +18,11 @@
 #include <QHideEvent>
 #include <QSystemTrayIcon>
 #include <QFileIconProvider>
+#include <QSharedMemory>
 
 #include <windows.h>
+
+#define FUP_SHARED_MEM_KEY "FOREVERUP_SHARED_SHOW_REQUEST"
 
 namespace Ui {
 class MainWindow;
@@ -71,6 +74,8 @@ private slots:
 
     void on_actionEnableNotifications_triggered(bool checked);
 
+    void onCheckShowRequestTimeout();
+
 private:
     bool isProcessHanging(int pid);
     void logMessage(QString level, QString msg, QString fileName = "");
@@ -92,6 +97,9 @@ private:
     QMenu *m_contextMenu;
 
     QFileIconProvider m_iconProvider;
+
+    QSharedMemory *m_showRequest;
+    QTimer *m_checkShowReqTimer;
 };
 
 #endif // MAINWINDOW_H

@@ -2,11 +2,38 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QLockFile>
+#include <QSharedMemory>
 
 int main(int argc, char **argv)
 {
     QApplication a(argc, argv);
     a.setStyle("Fusion");
+
+    // Lock file guard
+    QLockFile lockFile(QString("%1/foreverup.pid").arg(QDir::tempPath()));
+    lockFile.setStaleLockTime(0);
+    if (!lockFile.tryLock(100)) {
+        qDebug() << "ForeverUp is already running";
+        qint64 pid; QString hostName, appName;
+        lockFile.getLockInfo(&pid, &hostName, &appName);
+
+        QSharedMemory shared(FUP_SHARED_MEM_KEY);
+        if (!shared.attach()) {
+            qDebug() << "Can't attach to shared memory. Maybe the first instance doesn't run correctly.";
+            return 1;
+        }
+        if (!shared.lock()) {
+            qDebug() << "Couldn't lock the shared memory, nothing will be done.";
+            return 1;
+        }
+        qint64 *showRequest = (qint64*)shared.data();
+        *showRequest = pid;
+        shared.unlock();
+        shared.detach();
+        qDebug() << "Show request sent to pid:" << pid;
+        return 0;
+    }
 
     MainWindow w;
 

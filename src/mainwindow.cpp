@@ -51,6 +51,16 @@ MainWindow::MainWindow(QWidget *parent) :
     m_enableNotifications = !qApp->arguments().contains("quiet") && m_sysTrayIcon->supportsMessages();
     ui->actionEnableNotifications->setChecked(m_enableNotifications);
 
+    m_showRequest = new QSharedMemory(FUP_SHARED_MEM_KEY, this);
+    if (m_showRequest->create(sizeof(qint64))) {
+        m_checkShowReqTimer = new QTimer(this);
+        connect(m_checkShowReqTimer, SIGNAL(timeout()), this, SLOT(onCheckShowRequestTimeout()));
+        m_checkShowReqTimer->start(100);
+    }
+    else {
+        qDebug() << "Couldn't create shared memory. Interprocess show requests won't be used.";
+    }
+
     loadSettings();
 }
 
@@ -559,4 +569,21 @@ void MainWindow::logMessage(QString level, QString msg, QString fileName)
 void MainWindow::on_actionEnableNotifications_triggered(bool checked)
 {
     m_enableNotifications = checked;
+}
+
+void MainWindow::onCheckShowRequestTimeout()
+{
+    if (m_showRequest->lock()) {
+        qint64 *data = (qint64*)m_showRequest->data();
+        if (*data == qApp->applicationPid()) {
+            qDebug() << "Show request from another process!";
+            if (isHidden()) show();
+            activateWindow();
+            raise();
+        }
+        *data = 0;
+        m_showRequest->unlock();
+    } else {
+        qDebug() << "showReq: Couldn't lock shared memory.";
+    }
 }
