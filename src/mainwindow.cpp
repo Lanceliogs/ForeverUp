@@ -635,12 +635,6 @@ void MainWindow::applyAdvancedSettings()
         int showWindow = SW_SHOWNORMAL;
         QString execDir = QDir::toNativeSeparators(qApp->applicationDirPath());
 
-        qDebug() << target;
-        qDebug() << link;
-        qDebug() << execDir;
-
-        QString testIcoPath = "D:\\tools-dev\\ForeverUp\\src\\resources\\FUP_icon_white.ico";
-
         int ret = ShortcutProvider::create(target.toUtf8().data(), arguments.join(" ").toUtf8().data(),
                                            link.toUtf8().data(), description.toUtf8().data(),
                                            showWindow, execDir.toUtf8().data(), target.toUtf8().data(), 0);

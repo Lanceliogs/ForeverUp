@@ -163,7 +163,7 @@ void EditProgramDialog::on_cmdBrowseStartIn_clicked()
 void EditProgramDialog::on_cmdBrowseLogFile_clicked()
 {
     QString dirPath = ui->txtStartIn->text();
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select the log file"), dirPath, tr("Log file (*.log *.txt)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Select the log file"), dirPath, tr("Log file (*.log)"));
     if (fileName.isEmpty())
         return;
     ui->txtLogFile->setText(fileName);
