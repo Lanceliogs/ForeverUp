@@ -25,10 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     m_sysTrayIcon->setIcon(QIcon(":/icon/FUP_icon_white.png"));
     connect(m_sysTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(onSystemTrayIconActivated(QSystemTrayIcon::ActivationReason)));
+    m_sysTrayIcon->setToolTip(tr("ForeverUp - Stopped"));
 
     // Menu
     QMenu *menu = new QMenu(this);
-    m_statusAction = menu->addAction(tr("ForeverUp: Stopped"));
+    m_statusAction = menu->addAction(tr("ForeverUp - Stopped"));
     QAction *showAction = menu->addAction(tr("Open ForeverUp..."), this, SLOT(show()));
     QFont font = showAction->font();
     font.setBold(true);
@@ -257,7 +258,8 @@ void MainWindow::startMonitoring()
     ui->actionMonitoringStatus->setIcon(QIcon(":/icon/witness_green.png"));
 
     ui->txtServiceStatus->setText("Running");
-    m_statusAction->setText(tr("ForeverUp: Monitoring..."));
+    m_statusAction->setText(tr("ForeverUp - Monitoring..."));
+    m_sysTrayIcon->setToolTip(tr("ForeverUp - Monitoring..."));
 
     ui->actionStartMonitoring->setEnabled(false);
     m_startAction->setEnabled(false);
@@ -285,7 +287,8 @@ void MainWindow::on_actionStopMonitoring_triggered()
     ui->actionMonitoringStatus->setIcon(QIcon(":/icon/invisible_red.png"));
 
     ui->txtServiceStatus->setText("Not running");
-    m_statusAction->setText(tr("ForeverUp: Stopped"));
+    m_statusAction->setText(tr("ForeverUp - Stopped"));
+    m_sysTrayIcon->setToolTip(tr("ForeverUp - Stopped"));
 
     ui->actionStartMonitoring->setEnabled(true);
     m_startAction->setEnabled(true);
