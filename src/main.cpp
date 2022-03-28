@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QLockFile>
 #include <QSharedMemory>
+#include <QTranslator>
 
 int main(int argc, char **argv)
 {
@@ -33,6 +34,16 @@ int main(int argc, char **argv)
         shared.detach();
         qDebug() << "Show request sent to pid:" << pid;
         return 0;
+    }
+
+    // Translator
+    QTranslator translator;
+    qDebug() << "Loading translation:" << QLocale::countryToString(QLocale().country());
+    if (translator.load(QLocale(), "foreverup", "_", a.applicationDirPath(), ".qm")) {
+        qDebug() << "Found!";
+        a.installTranslator(&translator);
+    } else {
+        qDebug() << "Translation not found, using english default language";
     }
 
     MainWindow w;
