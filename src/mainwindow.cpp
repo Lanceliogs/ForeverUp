@@ -375,7 +375,7 @@ void MainWindow::onTimeout()
         }
     }
 
-    int memory = tokens.at(3).split(' ').first().remove(",").toInt() / 1024.;
+    int memory = WinSysApiUtils::getPrivateMemoryUsage() / 1024.;
     if (memory > item.memoryLimit) {
         logMessage(LL_WARNING, QString("Memory limit reached: %1 Mo > %2 Mo").arg(memory).arg(item.memoryLimit), item.logFile);
         restartProgram(index, true); // Kill it first

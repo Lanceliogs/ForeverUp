@@ -9,6 +9,7 @@
 #include "dialogs/nameanddescriptiondialog.h"
 
 #include "shortcutprovider.h"
+#include "winsysapiutils.h"
 
 #include <QMainWindow>
 #include <QSettings>

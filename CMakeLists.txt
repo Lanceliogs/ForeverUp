@@ -36,7 +36,7 @@ add_custom_target(GIT_SNAP
 # GUI
 file(GLOB_RECURSE GUI_SRC_LIST src/*)
 add_executable(ForeverUp WIN32 ${GUI_SRC_LIST} ${QM_FILES})
-target_link_libraries (ForeverUp ${Qt5Widgets_LIBRARIES}) # Linking
+target_link_libraries (ForeverUp ${Qt5Widgets_LIBRARIES} psapi) # Linking
 
 # Uncomment this to add the version inside the executable
 add_dependencies(ForeverUp GIT_SNAP)
